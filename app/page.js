@@ -65,14 +65,14 @@ export default function Home() {
           Track Your Movies
         </h1>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Discover, track, and share your favorite movies with friends. 
+          Discover, track, and share your favorite movies with friends.
           Create playlists and build your personal movie collection.
         </p>
-        
+
         <div className="flex justify-center mb-8">
           <SearchBar onSearch={handleSearch} />
         </div>
-        
+
         {!session && (
           <div className="space-x-4">
             <Link href="/auth/signup" className="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700">
@@ -94,7 +94,7 @@ export default function Home() {
               key={movie.tmdbId}
               movie={movie}
               onTrack={handleTrackMovie}
-              onRate={() => {}}
+              onRate={() => { }}
             />
           ))}
         </div>
