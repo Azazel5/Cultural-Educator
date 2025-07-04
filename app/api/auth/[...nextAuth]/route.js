@@ -1,12 +1,11 @@
+// app/api/auth/[...nextauth]/route.js
 
-// ==============================================
-// pages/api/auth/[...nextauth].js
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import dbConnect from '../../../lib/mongodb'
-import User from '../../../models/User'
+import dbConnect from '../../../../../lib/mongodb'
+import User from '../../../../../models/User'
 
-export default NextAuth({
+const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -15,18 +14,23 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        await dbConnect()
-        
-        const user = await User.findOne({ email: credentials.email })
-        
-        if (user && await user.comparePassword(credentials.password)) {
-          return {
-            id: user._id,
-            email: user.email,
-            username: user.username,
+        try {
+          await dbConnect()
+
+          const user = await User.findOne({ email: credentials.email })
+
+          if (user && await user.comparePassword(credentials.password)) {
+            return {
+              id: user._id.toString(),
+              email: user.email,
+              username: user.username,
+            }
           }
+          return null
+        } catch (error) {
+          console.error('Auth error:', error)
+          return null
         }
-        return null
       }
     })
   ],
@@ -45,5 +49,10 @@ export default NextAuth({
   },
   pages: {
     signIn: '/auth/login',
-  }
+  },
+  session: {
+    strategy: 'jwt',
+  },
 })
+
+export { handler as GET, handler as POST }

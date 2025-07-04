@@ -28,9 +28,12 @@ export const tmdbApi = {
   },
 
   getTrendingMovies: async () => {
+    console.log("Get trending movies, tmdb.js [31]")
     const response = await fetch(
       `${TMDB_BASE_URL}/trending/movie/week?api_key=${TMDB_API_KEY}`
     )
+
+    console.log(response.json())
     return response.json()
   }
 }

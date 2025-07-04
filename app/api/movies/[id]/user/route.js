@@ -7,7 +7,7 @@ import dbConnect from '../../../../lib/mongodb'
 import UserMovie from '../../../../models/UserMovie'
 import Movie from '../../../../models/Movie'
 
-export default async function handler(req, res) {
+export async function GET(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' })
   }

@@ -5,7 +5,7 @@
 import dbConnect from '../../../lib/mongodb'
 import User from '../../../models/User'
 
-export default async function handler(req, res) {
+export async function POST(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' })
   }
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     })
 
     if (existingUser) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         message: existingUser.email === email ? 'Email already exists' : 'Username already exists'
       })
     }

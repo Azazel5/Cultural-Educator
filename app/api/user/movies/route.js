@@ -6,7 +6,7 @@ import { getSession } from 'next-auth/react'
 import dbConnect from '../../../lib/mongodb'
 import UserMovie from '../../../models/UserMovie'
 
-export default async function handler(req, res) {
+export async function GET(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' })
   }
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     await dbConnect()
 
     const { limit = 20, status } = req.query
-    
+
     const query = { userId: session.user.id }
     if (status) {
       query.status = status
