@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import MovieCard from '../components/MovieCard'
+import MovieCard from '@/components/MovieCard'
 import { FilmIcon, EyeIcon, ClockIcon, StarIcon } from '@heroicons/react/24/outline'
 
 export default function Dashboard() {

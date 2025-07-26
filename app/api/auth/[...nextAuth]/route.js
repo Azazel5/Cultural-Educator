@@ -2,8 +2,8 @@
 
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import dbConnect from '../../../../../lib/mongodb'
-import User from '../../../../../models/User'
+import User from '@/models/User'
+import dbConnect from '@/lib/mongodb'
 
 const handler = NextAuth({
   providers: [

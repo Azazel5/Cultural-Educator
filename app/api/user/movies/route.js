@@ -3,7 +3,7 @@
 // pages/api/user/movies.js
 
 import { getSession } from 'next-auth/react'
-import dbConnect from '../../../lib/mongodb'
+import dbConnect from '@/lib/mongodb'
 import UserMovie from '../../../models/UserMovie'
 
 export async function GET(req, res) {

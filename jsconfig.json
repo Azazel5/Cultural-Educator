@@ -1,7 +1,23 @@
+// jsconfig.json (create this file in your project root)
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@/lib/*": ["./app/lib/*"],
+      "@/models/*": ["./app/models/*"],
+      "@/components/*": ["./app/components/*"],
+      "@/utils/*": ["./utils/*"]
     }
-  }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -6,8 +6,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import MovieCard from './components/MovieCard'
-import SearchBar from './components/SearchBar'
+import MovieCard from '@/components/MovieCard'
+import SearchBar from '@/components/SearchBar'
 import Link from 'next/link'
 
 export default function Home() {

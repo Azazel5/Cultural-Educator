@@ -2,9 +2,9 @@
 // ==============================================
 // pages/api/movies/search.js
 
-import { tmdbApi } from '../../../lib/tmdb'
-import dbConnect from '../../../lib/mongodb'
-import Movie from '../../../models/Movie'
+import { tmdbApi } from '@/lib/tmdb'
+import dbConnect from '@/lib/mongodb'
+import Movie from '@/models/Movie'
 
 export async function GET(req, res) {
   if (req.method !== 'GET') {

@@ -1,8 +1,8 @@
 // app/layout.js
 
 import './globals.css'
-import Navigation from './components/Navigation'
-import { AuthProvider } from './components/AuthProvider'
+import Navigation from '@/components/Navigation'
+import { AuthProvider } from '@/components/AuthProvider'
 
 export const metadata = {
   title: 'MovieTracker - Track Your Favorite Movies',

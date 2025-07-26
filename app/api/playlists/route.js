@@ -1,7 +1,8 @@
 // app/api/playlists/route.js
+
 import { getSession } from 'next-auth/react'
-import dbConnect from '../../../lib/mongodb'
-import Playlist from '../../../models/Playlist'
+import dbConnect from '@/lib/mongodb'
+import Playlist from '@/models/Playlist'
 
 export async function GET(request) {
   const session = await getSession({ req: request })

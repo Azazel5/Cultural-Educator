@@ -8,7 +8,6 @@ import React, { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { StarIcon, EyeIcon, ClockIcon } from '@heroicons/react/24/solid'
-import { StarIcon as StarOutline, EyeIcon as EyeOutline } from '@heroicons/react/24/outline'
 
 export default function MovieDetail({ params }) {
   const { id } = params

@@ -3,9 +3,9 @@
 // pages/api/movies/[id]/user.js
 
 import { getSession } from 'next-auth/react'
-import dbConnect from '../../../../lib/mongodb'
-import UserMovie from '../../../../models/UserMovie'
-import Movie from '../../../../models/Movie'
+import dbConnect from '@/lib/mongodb'
+import UserMovie from '@/models/UserMovie'
+import Movie from '@/models/Movie'
 
 export async function GET(req, res) {
   if (req.method !== 'GET') {

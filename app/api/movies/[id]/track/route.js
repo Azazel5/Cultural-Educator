@@ -3,9 +3,10 @@
 // pages/api/movies/[id]/track.js
 
 import { getSession } from 'next-auth/react'
-import dbConnect from '../../../../lib/mongodb'
-import UserMovie from '../../../../models/UserMovie'
-import Movie from '../../../../models/Movie'
+import dbConnect from '@/lib/mongodb'
+import UserMovie from '@/models/UserMovie'
+import Movie from '@/models/Movie'
+
 
 export async function POST(req, res) {
   if (req.method !== 'POST') {
