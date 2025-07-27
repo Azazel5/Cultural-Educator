@@ -1,18 +1,12 @@
-
-// ==============================================
-// pages/api/movies/trending.js
+// app/api/movies/trending/route.js
 
 import { tmdbApi } from '@/lib/tmdb'
 import dbConnect from '@/lib/mongodb'
 import Movie from '@/models/Movie'
 
-export async function GET(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' })
-  }
-
+export async function GET() {
   try {
-    console.log("Trending line [15]")
+    console.log("Trending API called - App Router version")
     const tmdbResults = await tmdbApi.getTrendingMovies()
 
     await dbConnect()
@@ -38,9 +32,12 @@ export async function GET(req, res) {
       movies.push(movie)
     }
 
-    res.status(200).json({ results: movies })
+    return Response.json({ results: movies })
   } catch (error) {
     console.error('Trending movies error:', error)
-    res.status(500).json({ message: 'Internal server error' })
+    return Response.json(
+      { message: 'Internal server error' }, 
+      { status: 500 }
+    )
   }
 }
