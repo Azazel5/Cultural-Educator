@@ -1,7 +1,4 @@
-
-// ==============================================
 // app/components/MovieCard.js
-
 'use client'
 
 import React from 'react'
@@ -10,7 +7,7 @@ import Link from 'next/link'
 import { StarIcon, EyeIcon } from '@heroicons/react/24/solid'
 import { StarIcon as StarOutline } from '@heroicons/react/24/outline'
 
-const MovieCard = ({ movie, userMovie, onTrack, onRate }) => {
+const MovieCard = ({ movie, userMovie, onTrack, onRate, priority = false }) => {
   const isWatched = userMovie?.status === 'watched'
   const userRating = userMovie?.userRating
 
@@ -22,7 +19,9 @@ const MovieCard = ({ movie, userMovie, onTrack, onRate }) => {
             src={movie.posterPath ? `https://image.tmdb.org/t/p/w500${movie.posterPath}` : '/placeholder-movie.jpg'}
             alt={movie.title}
             fill
+            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
             className="object-cover"
+            priority={priority}
           />
           {isWatched && (
             <div className="absolute top-2 right-2 bg-green-500 rounded-full p-1">
