@@ -1,16 +1,16 @@
-
-// ==============================================
 // app/movies/[id]/page.js
-
 'use client'
 
 import React, { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
+import { useParams } from 'next/navigation'  // Import useParams
 import Image from 'next/image'
 import { StarIcon, EyeIcon, ClockIcon } from '@heroicons/react/24/solid'
+import { StarIcon as StarOutline, EyeIcon as EyeOutline } from '@heroicons/react/24/outline'
 
-export default function MovieDetail({ params }) {
-  const { id } = params
+export default function MovieDetail() {
+  const params = useParams()  // Get params using hook
+  const id = params.id  // Extract id from params
   const { data: session } = useSession()
   const [movie, setMovie] = useState(null)
   const [userMovie, setUserMovie] = useState(null)
@@ -71,9 +71,9 @@ export default function MovieDetail({ params }) {
       await fetch(`/api/movies/${id}/track`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           status: userMovie?.status || 'watched',
-          rating 
+          rating
         })
       })
       setShowRatingModal(false)
@@ -96,26 +96,29 @@ export default function MovieDetail({ params }) {
 
   return (
     <div>
-      {/* Hero Section */}
+      {/* Hero Section with Netflix-style gradient */}
       <div className="relative h-96 mb-8">
         {movie.backdropPath && (
           <Image
             src={`https://image.tmdb.org/t/p/w1280${movie.backdropPath}`}
             alt={movie.title}
             fill
+            sizes="100vw"
             className="object-cover rounded-lg"
+            priority
           />
         )}
-        <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-end">
+        {/* Netflix-style gradient overlay - darker at bottom, transparent at top */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent rounded-lg flex items-end">
           <div className="p-8 text-white">
-            <h1 className="text-4xl font-bold mb-2">{movie.title}</h1>
+            <h1 className="text-4xl font-bold mb-2 drop-shadow-lg">{movie.title}</h1>
             <div className="flex items-center space-x-4">
-              <span className="flex items-center">
+              <span className="flex items-center drop-shadow-md">
                 <StarIcon className="w-5 h-5 text-yellow-400 mr-1" />
                 {movie.rating?.toFixed(1) || 'N/A'}
               </span>
-              <span>{new Date(movie.releaseDate).getFullYear()}</span>
-              {movie.runtime && <span>{movie.runtime} min</span>}
+              <span className="drop-shadow-md">{new Date(movie.releaseDate).getFullYear()}</span>
+              {movie.runtime && <span className="drop-shadow-md">{movie.runtime} min</span>}
             </div>
           </div>
         </div>
@@ -129,6 +132,7 @@ export default function MovieDetail({ params }) {
               src={movie.posterPath ? `https://image.tmdb.org/t/p/w500${movie.posterPath}` : '/placeholder-movie.jpg'}
               alt={movie.title}
               fill
+              sizes="(max-width: 1024px) 100vw, 33vw"
               className="object-cover rounded-lg"
             />
           </div>
@@ -138,11 +142,10 @@ export default function MovieDetail({ params }) {
             <div className="space-y-3">
               <button
                 onClick={() => handleTrackMovie(isWatched ? null : 'watched')}
-                className={`w-full flex items-center justify-center px-4 py-2 rounded-md ${
-                  isWatched 
-                    ? 'bg-green-600 text-white' 
+                className={`w-full flex items-center justify-center px-4 py-2 rounded-md ${isWatched
+                    ? 'bg-green-600 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-green-600 hover:text-white'
-                }`}
+                  }`}
               >
                 <EyeIcon className="w-5 h-5 mr-2" />
                 {isWatched ? 'Watched' : 'Mark as Watched'}
@@ -150,11 +153,10 @@ export default function MovieDetail({ params }) {
 
               <button
                 onClick={() => handleTrackMovie(isInWatchlist ? null : 'watchlist')}
-                className={`w-full flex items-center justify-center px-4 py-2 rounded-md ${
-                  isInWatchlist 
-                    ? 'bg-blue-600 text-white' 
+                className={`w-full flex items-center justify-center px-4 py-2 rounded-md ${isInWatchlist
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white'
-                }`}
+                  }`}
               >
                 <ClockIcon className="w-5 h-5 mr-2" />
                 {isInWatchlist ? 'In Watchlist' : 'Add to Watchlist'}
@@ -210,17 +212,16 @@ export default function MovieDetail({ params }) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold mb-4">Rate "{movie.title}"</h3>
-            
+
             <div className="flex justify-center space-x-2 mb-6">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rating) => (
                 <button
                   key={rating}
                   onClick={() => setSelectedRating(rating)}
-                  className={`w-8 h-8 rounded ${
-                    selectedRating >= rating 
-                      ? 'bg-yellow-500 text-white' 
+                  className={`w-8 h-8 rounded ${selectedRating >= rating
+                      ? 'bg-yellow-500 text-white'
                       : 'bg-gray-200 text-gray-700 hover:bg-yellow-400'
-                  }`}
+                    }`}
                 >
                   {rating}
                 </button>

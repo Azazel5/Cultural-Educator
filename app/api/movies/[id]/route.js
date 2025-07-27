@@ -1,18 +1,11 @@
-
-// ==============================================
-// pages/api/movies/[id].js
-
-import { tmdbApi } from '../../../lib/tmdb'
+// app/api/movies/[id]/route.js
+import { tmdbApi } from '@/lib/tmdb'
 import dbConnect from '@/lib/mongodb'
 import Movie from '@/models/Movie'
 
-export async function GET(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' })
-  }
-
+export async function GET(request, { params }) {
   try {
-    const { id } = req.query
+    const { id } = await params  // Await params before destructuring
 
     await dbConnect()
 
@@ -22,7 +15,7 @@ export async function GET(req, res) {
     if (!movie) {
       // Fetch from TMDB if not found locally
       const tmdbMovie = await tmdbApi.getMovie(id)
-
+      
       if (tmdbMovie.id) {
         movie = new Movie({
           tmdbId: tmdbMovie.id,
@@ -37,13 +30,16 @@ export async function GET(req, res) {
         })
         await movie.save()
       } else {
-        return res.status(404).json({ message: 'Movie not found' })
+        return Response.json({ message: 'Movie not found' }, { status: 404 })
       }
     }
 
-    res.status(200).json(movie)
+    return Response.json(movie)
   } catch (error) {
     console.error('Movie details error:', error)
-    res.status(500).json({ message: 'Internal server error' })
+    return Response.json(
+      { message: 'Internal server error' }, 
+      { status: 500 }
+    )
   }
 }

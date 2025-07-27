@@ -16,7 +16,6 @@ export const tmdbApi = {
       }
       
       const data = await response.json()  // Only call .json() once
-      console.log('TMDB Response:', data)  // Log the data, not the response
       return data
     } catch (error) {
       console.error('TMDB getTrendingMovies error:', error)
