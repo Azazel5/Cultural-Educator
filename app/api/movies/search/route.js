@@ -1,21 +1,21 @@
 
-// ==============================================
-// pages/api/movies/search.js
+// ========================
+// app/api/movies/search.js
 
 import { tmdbApi } from '@/lib/tmdb'
 import dbConnect from '@/lib/mongodb'
 import Movie from '@/models/Movie'
 
-export async function GET(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' })
-  }
-
+export async function GET(request) {
   try {
-    const { q: query } = req.query
+    const { searchParams } = new URL(request.url)
+    const query = searchParams.get('q')
 
     if (!query) {
-      return res.status(400).json({ message: 'Query parameter is required' })
+      return Response.json(
+        { message: 'Query parameter is required' },
+        { status: 400 }
+      )
     }
 
     // Search TMDB
@@ -45,9 +45,12 @@ export async function GET(req, res) {
       movies.push(movie)
     }
 
-    res.status(200).json({ results: movies })
+    return Response.json({ results: movies })
   } catch (error) {
     console.error('Search error:', error)
-    res.status(500).json({ message: 'Internal server error' })
+    return Response.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

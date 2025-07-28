@@ -1,29 +1,32 @@
 
-// ==============================================
-// pages/api/user/movies/batch.js
+// ============================
+// app/api/user/movies/batch.js
 
-import { getSession } from 'next-auth/react'
+import { auth } from '@/auth'
 import dbConnect from '@/lib/mongodb'
-import UserMovie from '../../../../models/UserMovie'
-import Movie from '../../../../models/Movie'
+import UserMovie from '@/models/UserMovie'
+import Movie from '@/models/Movie'
 
-export async function POST(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' })
-  }
-
+export async function POST(request) {
   try {
-    const session = await getSession({ req })
+    const session = await auth()
+
     if (!session) {
-      return res.status(401).json({ message: 'Unauthorized' })
+      return Response.json(
+        { message: 'Unauthorized' },
+        { status: 401 }
+      )
     }
 
     await dbConnect()
 
-    const { tmdbIds } = req.body
+    const { tmdbIds } = await request.json()
 
     if (!Array.isArray(tmdbIds)) {
-      return res.status(400).json({ message: 'tmdbIds must be an array' })
+      return Response.json(
+        { message: 'tmdbIds must be an array' },
+        { status: 400 }
+      )
     }
 
     // Find movies
@@ -46,9 +49,14 @@ export async function POST(req, res) {
       movie: userMovie.movieId
     }))
 
-    res.status(200).json({ userMovies: result })
+    return Response.json(
+      { userMovies: result }
+    )
   } catch (error) {
     console.error('Batch user movies error:', error)
-    res.status(500).json({ message: 'Internal server error' })
+    return Response.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

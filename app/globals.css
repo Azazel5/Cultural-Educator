@@ -15,3 +15,7 @@
     overflow: hidden;
   }
 }
+
+button {
+  cursor: pointer;
+}

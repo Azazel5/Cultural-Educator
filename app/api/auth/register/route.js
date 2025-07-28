@@ -1,27 +1,27 @@
 
 // ==============================================
-// pages/api/auth/register.js
+// app/api/auth/register.js
 
 import dbConnect from '@/lib/mongodb'
 import User from '@/models/User'
 
-export async function POST(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' })
-  }
-
+export async function POST(request) {
   try {
-    await dbConnect()
+    const { email, username, password } = await request.json()
 
-    const { email, username, password } = req.body
+    await dbConnect()
 
     // Validation
     if (!email || !username || !password) {
-      return res.status(400).json({ message: 'All fields are required' })
+      return Response.json(
+        { message: 'All fields are required' },
+        { status: 400 })
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ message: 'Password must be at least 6 characters' })
+      return Response.json(
+        { message: 'Password must be at least 6 characters' },
+        { status: 400 })
     }
 
     // Check if user exists
@@ -30,18 +30,23 @@ export async function POST(req, res) {
     })
 
     if (existingUser) {
-      return res.status(400).json({
-        message: existingUser.email === email ? 'Email already exists' : 'Username already exists'
-      })
+      return Response.json(
+        { message: existingUser.email === email ? 'Email already exists' : 'Username already exists' },
+        { status: 400 })
     }
 
     // Create user
     const user = new User({ email, username, password })
     await user.save()
 
-    res.status(201).json({ message: 'User created successfully' })
+    return Response.json(
+      { message: 'User created successfully' },
+      { status: 201 })
+
   } catch (error) {
     console.error('Registration error:', error)
-    res.status(500).json({ message: 'Internal server error' })
+    return Response.json(
+      { message: 'Internal server error' },
+      { status: 500 })
   }
 }

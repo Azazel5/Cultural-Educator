@@ -54,7 +54,11 @@ export default function Home() {
   }
 
   if (loading) {
-    return <div className="text-center py-8">Loading...</div>
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    )
   }
 
   return (
@@ -73,16 +77,6 @@ export default function Home() {
           <SearchBar onSearch={handleSearch} />
         </div>
 
-        {!session && (
-          <div className="space-x-4">
-            <Link href="/auth/signup" className="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700">
-              Get Started
-            </Link>
-            <Link href="/auth/login" className="text-primary-600 hover:text-primary-700">
-              Sign In
-            </Link>
-          </div>
-        )}
       </div>
 
       {/* Trending Movies */}
@@ -95,7 +89,7 @@ export default function Home() {
               movie={movie}
               onTrack={handleTrackMovie}
               onRate={() => { }}
-              priority={index === 0} 
+              priority={index === 0}
             />
           ))}
         </div>

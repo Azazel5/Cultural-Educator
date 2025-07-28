@@ -1,3 +1,4 @@
+// ================================
 // app/api/movies/trending/route.js
 
 import { tmdbApi } from '@/lib/tmdb'
@@ -6,7 +7,6 @@ import Movie from '@/models/Movie'
 
 export async function GET() {
   try {
-    console.log("Trending API called - App Router version")
     const tmdbResults = await tmdbApi.getTrendingMovies()
 
     await dbConnect()

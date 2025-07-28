@@ -1,9 +1,11 @@
+// ============================
 // app/api/movies/[id]/route.js
+
 import { tmdbApi } from '@/lib/tmdb'
 import dbConnect from '@/lib/mongodb'
 import Movie from '@/models/Movie'
 
-export async function GET(request, { params }) {
+export async function GET(_, { params }) {
   try {
     const { id } = await params  // Await params before destructuring
 
@@ -30,7 +32,10 @@ export async function GET(request, { params }) {
         })
         await movie.save()
       } else {
-        return Response.json({ message: 'Movie not found' }, { status: 404 })
+        return Response.json(
+          { message: 'Movie not found' }, 
+          { status: 404 }
+        )
       }
     }
 

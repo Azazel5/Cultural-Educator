@@ -1,30 +1,27 @@
 
-// ==============================================
-// pages/api/movies/[id]/user.js
+// =============================
+// app/api/movies/[id]/user.js
 
-import { getSession } from 'next-auth/react'
+import { auth } from '@/auth'
 import dbConnect from '@/lib/mongodb'
 import UserMovie from '@/models/UserMovie'
 import Movie from '@/models/Movie'
 
-export async function GET(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' })
-  }
-
+export async function GET(_, { params }) {
   try {
-    const session = await getSession({ req })
+    const session = await auth()
+
     if (!session) {
-      return res.status(200).json(null)
+      return Response.json(null)
     }
 
     await dbConnect()
 
-    const { id: tmdbId } = req.query
+    const { id: tmdbId } = await params
 
     const movie = await Movie.findOne({ tmdbId: parseInt(tmdbId) })
     if (!movie) {
-      return res.status(200).json(null)
+      return Response.json(null)
     }
 
     const userMovie = await UserMovie.findOne({
@@ -32,9 +29,13 @@ export async function GET(req, res) {
       movieId: movie._id
     })
 
-    res.status(200).json(userMovie)
+    return Response.json(userMovie)
   } catch (error) {
     console.error('User movie data error:', error)
-    res.status(500).json({ message: 'Internal server error' })
+
+    return Response.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

@@ -1,33 +1,37 @@
 
 // ==============================================
-// pages/api/movies/[id]/track.js
+// app/api/movies/[id]/track.js
 
-import { getSession } from 'next-auth/react'
+import { auth } from '@/auth'
 import dbConnect from '@/lib/mongodb'
 import UserMovie from '@/models/UserMovie'
 import Movie from '@/models/Movie'
 
 
-export async function POST(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' })
-  }
-
+export async function POST(request, { params }) {
   try {
-    const session = await getSession({ req })
+    const session = await auth()
+
     if (!session) {
-      return res.status(401).json({ message: 'Unauthorized' })
+      return Response.json(
+        { message: 'Unauthorized' },
+        { status: 401 }
+      )
     }
 
     await dbConnect()
 
-    const { id: tmdbId } = req.query
-    const { status, rating } = req.body
+    const { id: tmdbId } = await params
+    const { status, rating } = await request.json()
 
     // Find the movie
     const movie = await Movie.findOne({ tmdbId: parseInt(tmdbId) })
+
     if (!movie) {
-      return res.status(404).json({ message: 'Movie not found' })
+      return Response.json(
+        { message: 'Movie not found' },
+        { status: 404 }
+      )
     }
 
     if (status === null) {
@@ -51,9 +55,14 @@ export async function POST(req, res) {
       )
     }
 
-    res.status(200).json({ message: 'Movie tracking updated' })
+    return Response.json(
+      { message: 'Movie tracking updated' },
+    )
   } catch (error) {
     console.error('Track movie error:', error)
-    res.status(500).json({ message: 'Internal server error' })
+    return Response.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

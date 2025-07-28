@@ -1,13 +1,18 @@
+// ==========================
 // app/api/playlists/route.js
 
-import { getSession } from 'next-auth/react'
+import { auth } from '@/auth'
 import dbConnect from '@/lib/mongodb'
 import Playlist from '@/models/Playlist'
 
-export async function GET(request) {
-  const session = await getSession({ req: request })
+export async function GET() {
+  const session = await auth()
+  
   if (!session) {
-    return Response.json({ message: 'Unauthorized' }, { status: 401 })
+    return Response.json(
+      { message: 'Unauthorized' }, 
+      { status: 401 }
+    )
   }
 
   await dbConnect()
@@ -20,7 +25,8 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const session = await getSession({ req: request })
+  const session = await auth()
+  
   if (!session) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 })
   }
