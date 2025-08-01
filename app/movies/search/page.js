@@ -3,13 +3,13 @@
 // app/movies/search/page.js
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import MovieCard from '@/components/MovieCard'
 import SearchBar from '@/components/SearchBar'
 
-export default function SearchMovies() {
+export function SearchContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { data: session } = useSession()
@@ -52,7 +52,7 @@ export default function SearchMovies() {
         body: JSON.stringify({ tmdbIds })
       })
       const data = await response.json()
-      
+
       const userMovieMap = {}
       data.userMovies?.forEach(userMovie => {
         userMovieMap[userMovie.movie.tmdbId] = userMovie
@@ -79,7 +79,7 @@ export default function SearchMovies() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       })
-      
+
       if (status === null) {
         setUserMovies(prev => {
           const updated = { ...prev }
@@ -124,7 +124,7 @@ export default function SearchMovies() {
               movie={movie}
               userMovie={userMovies[movie.tmdbId]}
               onTrack={handleTrackMovie}
-              onRate={() => {}}
+              onRate={() => { }}
             />
           ))}
         </div>
@@ -134,5 +134,17 @@ export default function SearchMovies() {
         </div>
       ) : null}
     </div>
+  )
+}
+
+export default function SearchMovies() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <SearchContent />
+    </Suspense>
   )
 }
