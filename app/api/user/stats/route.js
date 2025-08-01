@@ -1,10 +1,10 @@
 
 // =====================
-// app/api/user/stats.js
+// app/api/user/states/route.js
 
 import { auth } from '@/auth'
 import dbConnect from '@/lib/mongodb'
-import UserMovie from '../../../models/UserMovie'
+import UserMovie from '@/models/UserMovie'
 
 export async function GET() {
   try {

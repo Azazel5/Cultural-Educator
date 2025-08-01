@@ -6,7 +6,6 @@ import { useSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'  // Import useParams
 import Image from 'next/image'
 import { StarIcon, EyeIcon, ClockIcon } from '@heroicons/react/24/solid'
-import { StarIcon as StarOutline, EyeIcon as EyeOutline } from '@heroicons/react/24/outline'
 
 export default function MovieDetail() {
   const params = useParams()  // Get params using hook

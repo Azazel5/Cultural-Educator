@@ -1,5 +1,5 @@
 
-// ==============================================
+// ==============
 // lib/mongodb.js
 
 import mongoose from 'mongoose'

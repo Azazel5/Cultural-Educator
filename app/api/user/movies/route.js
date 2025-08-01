@@ -4,7 +4,7 @@
 
 import { auth } from '@/auth'
 import dbConnect from '@/lib/mongodb'
-import UserMovie from '../../../models/UserMovie'
+import UserMovie from '@/models/UserMovie'
 
 export async function GET(request) {
   try {
@@ -19,7 +19,9 @@ export async function GET(request) {
 
     await dbConnect()
 
-    const { limit = 20, status } = await request.json()
+    const { searchParams } = new URL(request.url)
+    const limit = parseInt(searchParams.get('limit')) || 20
+    const status = searchParams.get('status')
 
     const query = { userId: session.user.id }
     if (status) {

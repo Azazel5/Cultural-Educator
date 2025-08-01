@@ -37,7 +37,6 @@ export default function Dashboard() {
 
       const statsData = await statsResponse.json()
       const moviesData = await moviesResponse.json()
-
       setStats(statsData)
       setRecentMovies(moviesData.movies || [])
     } catch (error) {
